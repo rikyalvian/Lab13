@@ -1,0 +1,33 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Tentang Kami - Alumni Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="container-content">
+        <h2 class="text-center"><i class="fa-solid fa-info-circle"></i> Tentang Kami</h2>
+        <p class="text-center">Mengenal lebih jauh tentang sistem manajemen alumni.</p>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4><i class="fa-solid fa-bullseye"></i> Visi</h4>
+                <p>Menjadi platform terbaik dalam menghubungkan alumni dengan komunitas mereka, meningkatkan jaringan profesional, serta memberikan peluang karir yang lebih luas.</p>
+            </div>
+            <div class="col-md-6">
+                <h4><i class="fa-solid fa-list-check"></i> Misi</h4>
+                <ul>
+                    <li>Memfasilitasi komunikasi antara alumni dan mahasiswa.</li>
+                    <li>Menawarkan informasi terbaru tentang peluang kerja dan acara alumni.</li>
+                    <li>Menyediakan forum diskusi dan mentorship bagi alumni baru.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'contacts' %}" class="btn btn-primary btn-icon">
+                <i class="fa-solid fa-envelope"></i> Hubungi Kami
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

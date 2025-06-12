@@ -1,0 +1,72 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Update Alumni - Alumni Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="container-content">
+        <h2 class="text-center"><i class="fa-solid fa-user-edit"></i> Update Data Alumni</h2>
+        <p class="text-center">Perbarui data alumni dengan informasi terbaru.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+                {% for field in form %}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            {% if field.name == "name" %}
+                                <i class="fa-solid fa-user"></i>
+                            {% elif field.name == "email" %}
+                                <i class="fa-solid fa-envelope"></i>
+                            {% elif field.name == "graduation_year" %}
+                                <i class="fa-solid fa-calendar"></i>
+                            {% elif field.name == "major" %}
+                                <i class="fa-solid fa-book"></i>
+                            {% elif field.name == "job_position" %}
+                                <i class="fa-solid fa-briefcase"></i>
+                            {% elif field.name == "company" %}
+                                <i class="fa-solid fa-building"></i>
+                            {% else %}
+                                <i class="fa-solid fa-pencil-alt"></i>
+                            {% endif %}
+                        </span>
+                        {{ field }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'list_alumni' %}" class="btn btn-secondary btn-icon">
+                    <i class="fa-solid fa-arrow-left"></i> Batal
+                </a>
+                <button type="submit" class="btn btn-success btn-icon">
+                    <i class="fa-solid fa-check"></i> Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .input-group-text {
+        background: #28a745;
+        color: white;
+        border-radius: 5px 0 0 5px;
+    }
+    .btn-icon {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    @media (max-width: 768px) {
+        .btn-icon {
+            font-size: 14px;
+            padding: 8px 10px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,81 @@
+body {
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+}
+
+h1 {
+  font-weight: 700;
+  color: #2c3e50;
+  letter-spacing: 1px;
+}
+
+.card {
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  border-radius: 1rem;
+  border: none;
+}
+
+#login-section, #register-section {
+  max-width: 400px;
+  margin: 40px auto 0 auto;
+  background: #fff;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.10);
+}
+
+#data-section {
+  max-width: 700px;
+  margin: 40px auto 0 auto;
+  background: #fff;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.10);
+}
+
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+  border-radius: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+input.form-control {
+  border-radius: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 1.05rem;
+}
+
+#alumni-list .card {
+  margin-bottom: 1.2rem;
+  border-left: 5px solid #0d6efd;
+  transition: box-shadow 0.2s;
+}
+#alumni-list .card:hover {
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.13);
+  border-left: 5px solid #198754;
+}
+
+#alumni-list h5 {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+#alumni-list p {
+  margin-bottom: 0.3rem;
+  color: #34495e;
+}
+
+#alumni-form, #alumni-edit-form {
+  margin-top: 1rem;
+}
+
+.text-danger, .text-success {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  #login-section, #register-section, #data-section {
+    padding: 1rem 0.5rem;
+  }
+}

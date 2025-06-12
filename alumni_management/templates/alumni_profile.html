@@ -1,0 +1,8 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+    <h2>Profil Anda</h2>
+    <p>Username: {{ user.username }}</p>
+    <p>Nama: {{ user.first_name }} {{ user.last_name }}</p>
+    <a href="{% url 'edit_profile' %}">Edit Profil</a>
+{% endblock %}

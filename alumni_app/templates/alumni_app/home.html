@@ -1,0 +1,9 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+    <div class="text-center">
+        <h1 class="my-5">Selamat Datang di Alumni Management System</h1>
+        <p>Sistem ini memudahkan Anda untuk mengelola informasi alumni.</p>
+        <a href="{% url 'alumni_list' %}" class="btn btn-primary">Lihat Daftar Alumni</a>
+    </div>
+{% endblock %}

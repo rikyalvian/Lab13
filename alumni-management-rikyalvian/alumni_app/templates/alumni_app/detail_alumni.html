@@ -1,0 +1,24 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Detail Alumni: {{ alumni.name }}</h2>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">{{ alumni.name }}</h5>
+            <ul class="list-unstyled">
+                <li><strong>Email:</strong> {{ alumni.email }}</li>
+                <li><strong>Graduation Year:</strong> {{ alumni.graduation_year }}</li>
+                <li><strong>Major:</strong> {{ alumni.major }}</li>
+                <li><strong>Job Position:</strong> {{ alumni.job_position }}</li>
+                <li><strong>Company:</strong> {{ alumni.company }}</li>
+            </ul>
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'alumni_edit' alumni.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'alumni_delete' alumni.pk %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

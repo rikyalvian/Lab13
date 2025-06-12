@@ -1,0 +1,33 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+<h2>Tambah Alumni Baru</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="{{ form.name.id_for_label }}">Name</label>
+        <input type="text" name="name" class="form-control" id="{{ form.name.id_for_label }}" value="{{ form.name.value }}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        <input type="email" name="email" class="form-control" id="{{ form.email.id_for_label }}" value="{{ form.email.value }}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="{{ form.graduation_year.id_for_label }}">Graduation Year</label>
+        <input type="number" name="graduation_year" class="form-control" id="{{ form.graduation_year.id_for_label }}" value="{{ form.graduation_year.value }}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="{{ form.major.id_for_label }}">Major</label>
+        <input type="text" name="major" class="form-control" id="{{ form.major.id_for_label }}" value="{{ form.major.value }}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="{{ form.job_position.id_for_label }}">Job Position</label>
+        <input type="text" name="job_position" class="form-control" id="{{ form.job_position.id_for_label }}" value="{{ form.job_position.value }}">
+    </div>
+    <div class="form-group mb-3">
+        <label for="{{ form.company.id_for_label }}">Company</label>
+        <input type="text" name="company" class="form-control" id="{{ form.company.id_for_label }}" value="{{ form.company.value }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Simpan</button>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Hapus Alumni - Alumni Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="container-content text-center">
+        <h3 class="text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Konfirmasi Hapus</h3>
+        <p class="fs-5">Apakah Anda yakin ingin menghapus <strong>{{ alumni.name }}</strong>?</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-icon">
+                <i class="fa-solid fa-trash"></i> Hapus
+            </button>
+            <a href="{% url 'list_alumni' %}" class="btn btn-secondary btn-icon">
+                <i class="fa-solid fa-ban"></i> Batal
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

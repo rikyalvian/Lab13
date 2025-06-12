@@ -1,0 +1,85 @@
+{% extends 'alumni_management/base.html' %}
+{% load static %}
+
+{% block title %}Detail Alumni – {{ alumni.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 fade-in">
+  <div class="row">
+    <!-- Foto Profil -->
+    <div class="col-md-4 text-center mb-4">
+      {% if alumni.photo %}
+        <img src="{{ alumni.photo.url }}" alt="Foto {{ alumni.name }}"
+             class="img-fluid rounded-circle mb-3" style="max-width: 200px;">
+      {% else %}
+        <div class="bg-secondary text-white rounded-circle d-inline-flex
+                    align-items-center justify-content-center mb-3"
+             style="width:200px; height:200px; font-size:4rem;">
+          <i class="fa-solid fa-user"></i>
+        </div>
+      {% endif %}
+      <h5 class="fw-bold">{{ alumni.name }}</h5>
+      <p class="text-muted mb-0"><i class="fa-solid fa-envelope me-1"></i>{{ alumni.email }}</p>
+    </div>
+
+    <!-- Detail Info -->
+    <div class="col-md-8">
+      <div class="card border-info shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h4 class="mb-0"><i class="fa-solid fa-id-card me-2"></i>Informasi Alumni</h4>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Tahun Lulus</dt>
+            <dd class="col-sm-8">{{ alumni.graduation_year }}</dd>
+
+            <dt class="col-sm-4">Jurusan</dt>
+            <dd class="col-sm-8">{{ alumni.major }}</dd>
+
+            <dt class="col-sm-4">Posisi</dt>
+            <dd class="col-sm-8">{{ alumni.job_position }}</dd>
+
+            <dt class="col-sm-4">Perusahaan</dt>
+            <dd class="col-sm-8">{{ alumni.company }}</dd>
+
+            {% if alumni.phone_number %}
+            <dt class="col-sm-4">Telepon</dt>
+            <dd class="col-sm-8">{{ alumni.phone_number }}</dd>
+            {% endif %}
+
+            {% if alumni.linkedin %}
+            <dt class="col-sm-4">LinkedIn</dt>
+            <dd class="col-sm-8">
+              <a href="{{ alumni.linkedin }}" target="_blank">
+                <i class="fa-brands fa-linkedin me-1"></i>Profil LinkedIn
+              </a>
+            </dd>
+            {% endif %}
+          </dl>
+        </div>
+        <div class="card-footer text-end">
+          <a href="{% url 'list_alumni' %}" class="btn btn-secondary btn-icon me-2">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+          </a>
+          
+          <!-- Edit Button: Only allowed for alumni owner or staff/admin -->
+          {% if user == alumni.user or user.is_superuser or user.is_staff %}
+          <a href="{% url 'update_alumni' alumni.pk %}" class="btn btn-warning btn-icon me-2">
+            <i class="fa-solid fa-pen"></i> Edit
+          </a>
+          {% endif %}
+          
+          <!-- Delete Button: Only allowed for admin or staff -->
+          {% if user.is_superuser or user.is_staff %}
+          <a href="{% url 'delete_alumni' alumni.pk %}"
+             class="btn btn-danger btn-icon"
+             onclick="return confirm('Yakin ingin menghapus alumni ini?');">
+            <i class="fa-solid fa-trash"></i> Hapus
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

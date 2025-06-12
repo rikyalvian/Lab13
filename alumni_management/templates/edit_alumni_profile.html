@@ -1,0 +1,13 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+    <h2>Edit Profil</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="first_name">Nama Depan:</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}">
+        <label for="last_name">Nama Belakang:</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}">
+        <button type="submit">Simpan</button>
+    </form>
+{% endblock %}

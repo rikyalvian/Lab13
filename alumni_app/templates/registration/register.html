@@ -1,0 +1,47 @@
+{% extends 'alumni_management/base.html' %}
+{% load form_tags %}
+
+{% block title %}Daftar - Sistem Alumni{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+        <div class="card-header bg-dark text-warning text-center" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+          <h4 class="mb-0"><i class="fa-solid fa-user-plus me-2"></i> Buat Akun Baru</h4>
+        </div>
+        <div class="card-body bg-light">
+          <form method="POST" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+              {% if field.name != 'is_admin' and field.name != 'is_member' %}
+                <div class="mb-3">
+                  <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field|add_class:"form-control" }}
+
+                  {% if field.errors %}
+                    <div class="text-danger mt-1">
+                      {% for error in field.errors %}
+                        <small><i class="fa fa-exclamation-circle me-1"></i>{{ error }}</small>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-dark w-100 fw-bold mt-2">
+              <i class="fa-solid fa-circle-check me-1"></i> Daftar Sekarang
+            </button>
+          </form>
+
+          <div class="mt-4 text-center">
+            <small>Sudah punya akun? <a href="{% url 'login' %}" class="text-decoration-none text-dark fw-semibold">Masuk di sini</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

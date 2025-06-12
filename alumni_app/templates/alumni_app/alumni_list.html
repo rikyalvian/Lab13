@@ -1,0 +1,40 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+<h2>Daftar Alumni</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Angkatan</th>
+            <th>Jurusan</th>
+            <th>Perusahaan</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alumni in alumni %}
+        <tr>
+            <td>{{ alumni.name }}</td>
+            <td>{{ alumni.email }}</td>
+            <td>{{ alumni.graduation_year }}</td>
+            <td>{{ alumni.major }}</td>
+            <td>{{ alumni.company }}</td>
+            <td>
+                <a href="{% url 'alumni_detail' alumni.pk %}" class="btn btn-sm btn-info">Detail</a>
+                <a href="{% url 'alumni_edit' alumni.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'alumni_delete' alumni.pk %}" class="btn btn-sm btn-danger">Hapus</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Belum ada alumni terdaftar.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'create_alumni' %}" class="btn btn-primary">Tambah Alumni</a>
+{% endblock %}

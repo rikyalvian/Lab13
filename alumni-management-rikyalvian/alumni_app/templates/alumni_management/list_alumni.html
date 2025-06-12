@@ -1,0 +1,155 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Daftar Alumni - Alumni Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="container-content">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0"><i class="fa-solid fa-users"></i> Daftar Alumni</h2>
+            <a href="{% url 'add_alumni' %}" class="btn btn-primary btn-icon">
+                <i class="fa-solid fa-user-plus"></i> Tambah Alumni
+            </a>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari alumni...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" id="alumniTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th class="sortable" onclick="sortTable(1)">Nama</th>
+                        <th class="sortable" onclick="sortTable(2)">Email</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alumni in alumni_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ alumni.name }}</td>
+                        <td>{{ alumni.email }}</td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center flex-wrap">
+                                <!-- Edit Profil (Hanya untuk pengguna yang sesuai) -->
+                                {% if user == alumni.user or user.is_superuser or user.is_staff %}
+                                    <a href="{% url 'update_alumni' alumni.id %}" class="btn btn-warning btn-sm btn-icon mx-1">
+                                        <i class="fa-solid fa-pen"></i> Edit Profil
+                                    </a>
+                                {% endif %}
+                                <a href="#" class="btn btn-info btn-sm btn-icon mx-1"
+                                   onclick="openDetailModal({{ alumni.id }})"
+                                   data-bs-toggle="modal" data-bs-target="#detailModal">
+                                    <i class="fa-solid fa-eye"></i> Detail
+                                </a>
+                                {% if user.is_superuser or user.is_staff %}
+                                <a href="{% url 'delete_alumni' alumni.id %}"
+                                   class="btn btn-danger btn-sm btn-icon mx-1"
+                                   onclick="return confirm('Yakin ingin menghapus data alumni ini?')">
+                                    <i class="fa-solid fa-trash"></i> Hapus
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETAIL ALUMNI -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="detailModalLabel">Detail Alumni</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Nama:</strong> <span id="modalName"></span></p>
+        <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+        <p><strong>Tahun Lulus:</strong> <span id="modalYear"></span></p>
+        <p><strong>Jurusan:</strong> <span id="modalMajor"></span></p>
+        <p><strong>Posisi:</strong> <span id="modalJob"></span></p>
+        <p><strong>Perusahaan:</strong> <span id="modalCompany"></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .btn-icon {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .sortable {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .btn-icon {
+            font-size: 14px;
+            padding: 8px 10px;
+        }
+    }
+</style>
+
+<script>
+    // 🔍 Live Search
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        const keyword = this.value.toLowerCase();
+        document.querySelectorAll("#alumniTable tbody tr").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(keyword) ? "" : "none";
+        });
+    });
+
+    // ↕ Sort Table (Klik Kolom)
+    function sortTable(columnIndex) {
+        const table = document.getElementById("alumniTable").getElementsByTagName("tbody")[0];
+        let rows = Array.from(table.rows);
+        let ascending = table.getAttribute("data-sort-dir") !== "asc";
+
+        rows.sort((a, b) => {
+            let A = a.cells[columnIndex].innerText.toLowerCase();
+            let B = b.cells[columnIndex].innerText.toLowerCase();
+            return ascending ? A.localeCompare(B) : B.localeCompare(A);
+        });
+
+        table.innerHTML = '';
+        rows.forEach(row => table.appendChild(row));
+        table.setAttribute("data-sort-dir", ascending ? "asc" : "desc");
+    }
+
+    // 🔎 AJAX Detail Alumni
+    function openDetailModal(alumniId) {
+        fetch(`/alumni/${alumniId}/detail/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("modalName").innerText = data.name;
+                document.getElementById("modalEmail").innerText = data.email;
+                document.getElementById("modalYear").innerText = data.graduation_year;
+                document.getElementById("modalMajor").innerText = data.major;
+                document.getElementById("modalJob").innerText = data.job_position;
+                document.getElementById("modalCompany").innerText = data.company;
+            });
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,541 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow border-0 bg-white rounded-3">
+        <div class="card-body p-4">
+          <h2 class="fw-bold mb-0">Dashboard Alumni</h2>
+          <p class="text-secondary mb-0">Selamat datang di portal manajemen alumni</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATISTIK OVERVIEW -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-secondary mb-0">Total Alumni</h6>
+            <span class="bg-primary bg-opacity-10 text-primary p-2 rounded-circle">
+              <i class="bi bi-people-fill"></i>
+            </span>
+          </div>
+          <h3 class="fw-bold mb-0 mt-auto">{{ total_alumni }}</h3>
+          <p class="text-success mb-0"><i class="bi bi-arrow-up-short"></i> Berkembang</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-secondary mb-0">Alumni Bekerja</h6>
+            <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle">
+              <i class="bi bi-briefcase-fill"></i>
+            </span>
+          </div>
+          <h3 class="fw-bold mb-0 mt-auto">{{ persentase_bekerja }}%</h3>
+          <p class="text-secondary mb-0">Tingkat pekerjaan</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-secondary mb-0">Jurusan Terbanyak</h6>
+            <span class="bg-info bg-opacity-10 text-info p-2 rounded-circle">
+              <i class="bi bi-book-fill"></i>
+            </span>
+          </div>
+          <h3 class="fw-bold mb-0 mt-auto">{{ jurusan_terbanyak.major }}</h3>
+          <p class="text-secondary mb-0">Program unggulan</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="text-secondary mb-0">Angkatan Aktif</h6>
+            <span class="bg-warning bg-opacity-10 text-warning p-2 rounded-circle">
+              <i class="bi bi-calendar-check-fill"></i>
+            </span>
+          </div>
+          <h3 class="fw-bold mb-0 mt-auto">{{ angkatan_years|length }}</h3>
+          <p class="text-secondary mb-0">Tahun pendataan</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0 fw-bold">Filter Data</h5>
+        </div>
+        <div class="card-body">
+          <form method="get" action="{% url 'dashboard' %}" class="row g-3">
+            <div class="col-md-4">
+              <label for="year" class="form-label fw-semibold">Angkatan</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-calendar-event"></i></span>
+                <select name="year" id="year" class="form-select">
+                  <option value="">Semua Angkatan</option>
+                  {% for y in angkatan_years %}
+                    <option value="{{ y }}" {% if y|stringformat:"s" == year_filter %}selected{% endif %}>{{ y }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="major" class="form-label fw-semibold">Jurusan</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-mortarboard"></i></span>
+                <select name="major" id="major" class="form-select">
+                  <option value="">Semua Jurusan</option>
+                  {% for m in majors %}
+                    <option value="{{ m }}" {% if m == major_filter %}selected{% endif %}>{{ m }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <div class="d-grid gap-2 d-md-flex w-100">
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-filter me-2"></i>Terapkan</button>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary px-4"><i class="bi bi-arrow-counterclockwise me-2"></i>Reset</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if user.is_authenticated and user.is_member and user.alumni %}
+  <!-- MENU MANAJEMEN -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Manajemen Profil</h5>
+          <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenu" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </div>
+        <div class="collapse show" id="collapseMenu">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-md-6">
+                <div class="list-group list-group-flush">
+                  <a href="{% url 'update_alumni' user.alumni.id %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-primary bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-person-lines-fill text-primary"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Edit Profil Saya</h6>
+                        <small class="text-secondary">Perbarui data diri Anda</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'riwayat_pendidikan' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-success bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-mortarboard-fill text-success"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Riwayat Pendidikan Formal</h6>
+                        <small class="text-secondary">Kelola riwayat akademik</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'pendidikan_nonformal' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-info bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-journal-text text-info"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Pendidikan Non-Formal</h6>
+                        <small class="text-secondary">Kursus dan sertifikasi</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'organisasi' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-warning bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-people text-warning"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Pengalaman Organisasi</h6>
+                        <small class="text-secondary">Aktivitas organisasi</small>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="list-group list-group-flush">
+                  <a href="{% url 'penghargaan' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-danger bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-trophy text-danger"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Daftar Penghargaan</h6>
+                        <small class="text-secondary">Prestasi dan pengakuan</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'kemampuan' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-purple bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-lightbulb text-purple"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Kemampuan / Skill</h6>
+                        <small class="text-secondary">Kompetensi dan keahlian</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'pekerjaan' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-secondary bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-briefcase text-secondary"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Pengalaman Pekerjaan</h6>
+                        <small class="text-secondary">Karir dan riwayat kerja</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="{% url 'list_alumni' %}" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex align-items-center">
+                      <span class="bg-primary bg-opacity-10 p-2 rounded-circle me-3"><i class="bi bi-search text-primary"></i></span>
+                      <div>
+                        <h6 class="mb-0 fw-semibold">Lihat Seluruh Alumni</h6>
+                        <small class="text-secondary">Jelajahi jaringan alumni</small>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- GRAFIK -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Alumni per Angkatan</h5>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-download me-2"></i>Unduh Data</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>Cetak</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body p-3">
+          <canvas id="angkatanChart" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Distribusi Pekerjaan</h5>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-download me-2"></i>Unduh Data</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>Cetak</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body p-3">
+          <canvas id="pekerjaanChart" height="260"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Bidang Pekerjaan</h5>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton3">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-download me-2"></i>Unduh Data</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>Cetak</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body p-3">
+          <canvas id="bidangChart" height="250"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold">Top 5 Perusahaan</h5>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton4">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-download me-2"></i>Unduh Data</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>Cetak</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body p-3">
+          <canvas id="perusahaanChart" height="250"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- FOOTER -->
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center text-secondary">
+        <small>© 2025 Sistem Manajemen Alumni. Seluruh hak cipta dilindungi.</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<!-- Additional CSS -->
+<style>
+  .text-purple { color: #6f42c1; }
+  .bg-purple { background-color: #6f42c1; }
+  .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  }
+  .list-group-item-action:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+</style>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Customize Chart.js defaults
+  Chart.defaults.font.family = "'Poppins', 'Segoe UI', sans-serif";
+  Chart.defaults.color = '#6c757d';
+  Chart.defaults.borderColor = '#f8f9fa';
+  
+  // Chart data from context
+  const labelsAngkatan = JSON.parse('{{ angkatan_labels|escapejs }}');
+  const dataAngkatan = JSON.parse('{{ angkatan_data|escapejs }}');
+  const labelsPekerjaan = JSON.parse('{{ pekerjaan_labels|escapejs }}');
+  const dataPekerjaan = JSON.parse('{{ pekerjaan_data|escapejs }}');
+  const labelsBidang = JSON.parse('{{ bidang_labels|escapejs }}');
+  const dataBidang = JSON.parse('{{ bidang_data|escapejs }}');
+  const labelsPerusahaan = JSON.parse('{{ perusahaan_labels|escapejs }}');
+  const dataPerusahaan = JSON.parse('{{ perusahaan_data|escapejs }}');
+
+  // Chart color palettes
+  const colorPalette1 = ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545'];
+  const colorPalette2 = ['#0dcaf0', '#20c997', '#198754', '#ffc107', '#fd7e14'];
+
+  // Alumni per Angkatan Chart
+  new Chart(document.getElementById('angkatanChart'), {
+    type: 'bar',
+    data: {
+      labels: labelsAngkatan,
+      datasets: [{ 
+        label: 'Jumlah Alumni', 
+        data: dataAngkatan, 
+        backgroundColor: '#0d6efd',
+        borderRadius: 6,
+        barThickness: 24,
+        maxBarThickness: 30
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#212529',
+          bodyColor: '#212529',
+          borderColor: '#e9ecef',
+          borderWidth: 1,
+          padding: 12,
+          boxPadding: 6,
+          usePointStyle: true,
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false,
+            display: true,
+            drawTicks: false,
+          },
+        },
+        x: {
+          grid: {
+            display: false,
+            drawBorder: false,
+            drawTicks: false,
+          },
+        }
+      },
+    }
+  });
+
+  // Distribusi Pekerjaan Chart
+  new Chart(document.getElementById('pekerjaanChart'), {
+    type: 'pie',
+    data: {
+      labels: labelsPekerjaan,
+      datasets: [{ 
+        data: dataPekerjaan, 
+        backgroundColor: colorPalette1,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            padding: 20
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#212529',
+          bodyColor: '#212529',
+          borderColor: '#e9ecef',
+          borderWidth: 1,
+          padding: 12,
+          boxPadding: 6,
+        }
+      },
+    }
+  });
+
+  // Bidang Pekerjaan Chart
+  new Chart(document.getElementById('bidangChart'), {
+    type: 'doughnut',
+    data: {
+      labels: labelsBidang,
+      datasets: [{ 
+        data: dataBidang, 
+        backgroundColor: colorPalette2,
+        borderWidth: 0,
+        cutout: '70%'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            padding: 20
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#212529',
+          bodyColor: '#212529',
+          borderColor: '#e9ecef',
+          borderWidth: 1,
+          padding: 12,
+          boxPadding: 6,
+        }
+      },
+    }
+  });
+
+  // Top 5 Perusahaan Chart
+  new Chart(document.getElementById('perusahaanChart'), {
+    type: 'bar',
+    data: {
+      labels: labelsPerusahaan,
+      datasets: [{ 
+        label: 'Jumlah Alumni', 
+        data: dataPerusahaan, 
+        backgroundColor: '#20c997',
+        borderRadius: 6,
+        barThickness: 18,
+        maxBarThickness: 20
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#212529',
+          bodyColor: '#212529',
+          borderColor: '#e9ecef',
+          borderWidth: 1,
+          padding: 12,
+          boxPadding: 6,
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false,
+            display: true,
+            drawTicks: false,
+          },
+        },
+        y: {
+          grid: {
+            display: false,
+            drawBorder: false,
+            drawTicks: false,
+          },
+        }
+      },
+    }
+  });
+
+  // Collapsible sections toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const collapseButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
+    collapseButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('bi-chevron-down')) {
+          icon.classList.replace('bi-chevron-down', 'bi-chevron-up');
+        } else {
+          icon.classList.replace('bi-chevron-up', 'bi-chevron-down');
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

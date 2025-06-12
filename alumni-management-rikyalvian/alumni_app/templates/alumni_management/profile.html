@@ -1,0 +1,55 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Profil Alumni{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item active">Profil Saya</li>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow-sm border-0">
+    <div class="row g-0">
+      <!-- FOTO PROFIL -->
+      <div class="col-md-4 text-center bg-light d-flex align-items-center justify-content-center p-4">
+        {% if alumni.photo %}
+          <img src="{{ alumni.photo.url }}" alt="Foto Profil" class="img-fluid rounded-circle border" style="max-width: 200px;">
+        {% else %}
+          <img src="data:image/jpeg;base64,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" alt="Default Photo" class="img-fluid rounded-circle border">
+        {% endif %}
+      </div>
+
+      <!-- DETAIL PROFIL -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <h3 class="card-title fw-bold text-dark mb-4">{{ alumni.name }}</h3>
+          <table class="table table-borderless">
+            <tbody>
+              <tr><th scope="row" class="text-muted w-50">Email</th><td>{{ alumni.email }}</td></tr>
+              <tr><th scope="row" class="text-muted">Tahun Lulus</th><td>{{ alumni.graduation_year }}</td></tr>
+              <tr><th scope="row" class="text-muted">Jurusan</th><td>{{ alumni.major }}</td></tr>
+              <tr><th scope="row" class="text-muted">Posisi Pekerjaan</th><td>{{ alumni.job_position }}</td></tr>
+              <tr><th scope="row" class="text-muted">Perusahaan</th><td>{{ alumni.company }}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="mt-4">
+            {% if alumni.user == user or user.is_superuser or user.is_staff %}
+              <a href="{% url 'update_alumni' alumni.id %}" class="btn btn-warning me-2">
+                <i class="fa-solid fa-pen"></i> Edit Profil
+              </a>
+            {% endif %}
+
+            {% if user.is_staff or user.is_superuser %}
+              <a href="{% url 'list_alumni' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-users"></i> Kelola Alumni
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

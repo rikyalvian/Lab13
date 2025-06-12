@@ -1,0 +1,100 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Login & Register{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px;">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Selamat Datang!</h2>
+      <p class="text-muted">Silakan Login atau Daftar untuk melanjutkan.</p>
+    </div>
+
+    <!-- Pills navs -->
+    <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-login" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-register" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false">Register</button>
+      </li>
+    </ul>
+    <!-- Pills navs -->
+
+    <!-- Pills content -->
+    <div class="tab-content" id="pills-tabContent">
+      
+      <!-- Login Form -->
+      <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+        {% if form.errors %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Login gagal!</strong> Username atau password salah.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Username" required>
+            <label for="id_username">Username atau Email</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
+            <label for="id_password">Password</label>
+          </div>
+
+          <div class="d-flex justify-content-between mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe" />
+              <label class="form-check-label" for="rememberMe">Remember me</label>
+            </div>
+            <a href="#" class="small text-decoration-none">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2">Masuk</button>
+        </form>
+      </div>
+
+      <!-- Register Form -->
+      <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+        <form method="post" action="{% url 'register' %}" novalidate>
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input type="text" name="name" id="id_name" class="form-control" placeholder="Name" required>
+            <label for="id_name">Nama Lengkap</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" name="username" id="id_registerUsername" class="form-control" placeholder="Username" required>
+            <label for="id_registerUsername">Username</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="email" name="email" id="id_registerEmail" class="form-control" placeholder="Email" required>
+            <label for="id_registerEmail">Email</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" name="password1" id="id_registerPassword" class="form-control" placeholder="Password" required>
+            <label for="id_registerPassword">Password</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" name="password2" id="id_registerRepeatPassword" class="form-control" placeholder="Repeat Password" required>
+            <label for="id_registerRepeatPassword">Repeat Password</label>
+          </div>
+
+          <div class="form-check d-flex justify-content-center mb-3">
+            <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
+            <label class="form-check-label ms-2" for="termsCheck">
+              Saya setuju dengan syarat dan ketentuan
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 py-2">Daftar</button>
+        </form>
+      </div>
+
+    </div>
+    <!-- Pills content -->
+
+  </div>
+</div>
+{% endblock %}

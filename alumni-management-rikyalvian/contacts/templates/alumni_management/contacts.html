@@ -1,0 +1,47 @@
+{% extends 'alumni_management/base.html' %}
+
+{% block title %}Kontak - Alumni Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="container-content">
+        <h2 class="text-center"><i class="fa-solid fa-envelope"></i> Hubungi Kami</h2>
+        <p class="text-center">Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau saran.</p>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4><i class="fa-solid fa-location-dot"></i> Alamat</h4>
+                <p>Jl. Alumni Sejahtera No. 10, Jakarta, Indonesia</p>
+
+                <h4><i class="fa-solid fa-phone"></i> Telepon</h4>
+                <p>(+62) 812-3456-7890</p>
+
+                <h4><i class="fa-solid fa-envelope"></i> Email</h4>
+                <p>info@alumni-management.com</p>
+            </div>
+
+            <div class="col-md-6">
+                <h4><i class="fa-solid fa-comments"></i> Kirim Pesan</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Nama</label>
+                        <input type="text" class="form-control" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="Email Anda" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Pesan</label>
+                        <textarea class="form-control" rows="4" placeholder="Tulis pesan Anda..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-icon">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

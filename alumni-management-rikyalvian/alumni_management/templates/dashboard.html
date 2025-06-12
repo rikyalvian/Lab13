@@ -1,0 +1,15 @@
+{% extends 'alumni_app/base.html' %}
+
+{% block content %}
+    <h2>Dashboard</h2>
+    {% if user.is_admin %}
+        <h3>Daftar Alumni:</h3>
+        <ul>
+            {% for alumni in alumni_list %}
+                <li>{{ alumni.username }} - <a href="{% url 'edit_profile' alumni.id %}">Edit</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Welcome, {{ user.username }}! This is your dashboard.</p>
+    {% endif %}
+{% endblock %}

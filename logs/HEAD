@@ -1,0 +1,4 @@
+0000000000000000000000000000000000000000 a8f32aebb5f799fc65ecaa3534a93e0c87e17f8e abaystwnp <abaysp7@gmail.com> 1749739003 +0700	commit (initial): Initial project commit with SPA, DRF, filtering, searching, sorting, and pagination
+a8f32aebb5f799fc65ecaa3534a93e0c87e17f8e 0000000000000000000000000000000000000000 abaystwnp <abaysp7@gmail.com> 1749739015 +0700	Branch: renamed refs/heads/master to refs/heads/main
+0000000000000000000000000000000000000000 a8f32aebb5f799fc65ecaa3534a93e0c87e17f8e abaystwnp <abaysp7@gmail.com> 1749739015 +0700	Branch: renamed refs/heads/master to refs/heads/main
+a8f32aebb5f799fc65ecaa3534a93e0c87e17f8e fbaf28a6677863eb4ce1099204f408cf6f574c39 abaystwnp <abaysp7@gmail.com> 1749739412 +0700	commit: Update project
