@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-cpj3=%b6n_a0%wy(y%a%33_8k*-a$-#=@7cjwt@auadc89$ytt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['103.151.63.65', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'frontend_app_spa',  # Menambahkan frontend_app_spa ke INSTALLED_APPS
     'django_filters',
+    'drf_yasg',
 ]
 
 AUTH_USER_MODEL = 'usermanagement.User'
@@ -173,4 +174,16 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 3,
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "JWT Authorization header. Example: 'Bearer {token}'",
+        }
+    },
+    'USE_SESSION_AUTH': False,
 }
